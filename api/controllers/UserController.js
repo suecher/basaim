@@ -5,14 +5,21 @@
 * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
   */
 
+var number=parseInt(Math.random()*10000);
+console.log(number)
+///随机数
+
 module.exports = {
-
-  login:function(req,res){
-
+  getNumber:function(req,res){        //获取验证码
     var param = req.body;
-
-
-
+    if(param.mobile ){
+      res.json(number)
+    } else {
+      res.json({result:false,body:{err:"缺少必要参数"}});
+    }
+  },
+  login:function(req,res){        //登录ok
+    var param = req.body;
     if(param.username && param.password){
       User.findOne({
         username: param.username,
@@ -24,16 +31,31 @@ module.exports = {
         } else {
           res.json({result:false,body:{err:"用户数据不存在"}});
         }
-
       });
-
-
     } else {
       res.json({result:false,body:{err:"缺少必要参数"}});
     }
   },
-  test:function(req,res){
-    res.send("Hello");
+  createUser:function(req,res){        //注册ok
+    var param = req.body;
+    if(param.mobile && param.password && param.code){
+      User.create({
+        mobile: param.mobile,
+        password: param.password,
+        username:param.mobile
+      },function(err,doc){
+
+        if(doc){
+          res.json({result:true,body:doc});
+        } else {
+          res.json({result:false,body:{err:"用户数据不存在"}});
+        }
+      });
+    } else {
+      res.json({result:false,body:{err:"缺少必要参数"}});
+    }
   }
+
+
 
 };
