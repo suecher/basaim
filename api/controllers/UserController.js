@@ -28,6 +28,7 @@ module.exports = {
 
         if(doc){
           res.json({result:true,body:doc});
+
         } else {
           res.json({result:false,body:{err:"用户数据不存在"}});
         }
@@ -54,7 +55,41 @@ module.exports = {
     } else {
       res.json({result:false,body:{err:"缺少必要参数"}});
     }
-  }
+  },
+  getUsermessage:function(req,res){     //用户信息，好友信息ok
+    var param = req.body;
+    if(param.userId){
+      User.find({
+        id: param.userId
+      },function(err,doc){
+        if(doc){
+          res.json({result:true,body:doc});
+        } else {
+          res.json({result:false,body:{err:"用户数据不存在"}});
+        }
+      });
+    } else {
+      res.json({result:false,body:{err:"缺少必要参数"}});
+    }
+  },
+  UpdateUser:function(req,res){   //修改个人信息，修改内容待修改
+    var param = req.body;
+    var obj = req.body.updateobj
+
+    if(param.userId){
+      User.update({
+        id:param.userId
+      },obj,function(err,doc){
+        if(doc){
+          res.json({result:true,body:doc});
+        } else {
+          res.json({result:false,body:{err:"用户数据不存在"}});
+        }
+      });
+    } else {
+      res.json({result:false,body:{err:"缺少必要参数"}});
+    }
+  },
 
 
 
